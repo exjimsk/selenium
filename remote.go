@@ -652,18 +652,25 @@ func (wd *remoteWD) ResizeWindow(name string, width, height int) error {
 	return err
 }
 
-func (wd *remoteWD) SwitchFrame(frame string) error {
-	params := map[string]interface{}{
-		"id": frame,
-	}
-	if len(frame) == 0 {
+func (wd *remoteWD) SwitchFrame(frame interface{}) error {
+	params := map[string]interface{}{}
+
+	switch f := frame.(type) {
+	case int:
+		params["id"] = f
+	case string:
+		params["id"] = f
+	case nil:
 		params["id"] = nil
+	default:
+		return fmt.Errorf(`switch frame does not recognize frame argument`)
 	}
 
 	data, err := json.Marshal(params)
 	if err != nil {
 		return err
 	}
+
 	return wd.voidCommand("/session/%s/frame", data)
 }
 

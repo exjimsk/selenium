@@ -248,8 +248,8 @@ type WebDriver interface {
 	PageSource() (string, error)
 	/* Close current window. */
 	Close() error
-	/* Switch to frame, frame parameter can be name or id. */
-	SwitchFrame(frame string) error
+	/* Switch to frame, frame parameter can have concrete types string (switch to frame name), int (switch to frame id) or be nil (switch to parent frame). */
+	SwitchFrame(frame interface{}) error
 	/* Swtich to window. */
 	SwitchWindow(name string) error
 	/* Close window. */
